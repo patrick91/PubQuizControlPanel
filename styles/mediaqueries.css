@@ -1,0 +1,4 @@
+:export {
+    medium-viewport: (min-width: 30em);
+    big-viewport: (min-width: 48em);
+}

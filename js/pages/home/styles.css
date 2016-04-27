@@ -1,0 +1,55 @@
+.wrapper {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+}
+
+.box {
+    width: 50%;
+    height: 100%;
+    background: red;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    font-family: Roboto;
+    font-size: 4rem;
+    font-weight: 200;
+
+    color: white;
+
+    text-decoration: none;
+}
+
+.code-input {
+    display: block;
+    background: transparent;
+    color: white;
+    border: 0;
+
+    font-family: monospace;
+
+    font-size: 4rem;
+    text-align: center;
+    outline-color: white;
+
+    margin-top: .5em;
+}
+
+.code-input::-webkit-input-placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.code-input::-moz-placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.code-input:-ms-input-placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.button {
+    margin-top: 3rem;
+}

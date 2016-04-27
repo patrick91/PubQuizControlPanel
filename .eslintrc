@@ -1,0 +1,13 @@
+{
+    "parser": "babel-eslint",
+    "extends": "airbnb",
+    "rules": {
+        "new-cap": 0,
+        "indent": ["error", 4, { "SwitchCase": 1 }],
+        "react/jsx-indent": ["error", 4],
+        "react/jsx-indent-props": ["error", 4],
+        "react/prefer-stateless-function": 0,
+        "react/wrap-multilines": 0,
+        "react/jsx-closing-bracket-location": 0
+    }
+}

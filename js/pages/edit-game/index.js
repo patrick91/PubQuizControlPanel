@@ -87,22 +87,7 @@ class EditGame extends React.Component {
         const editors = [];
 
         for (const question of questions) {
-            const content = ContentState.createFromText(question.title);
-
-            const answers = [];
-
-            for (let i = 0; i < 4; i++) {
-                const answer = question.answers[i] || '';
-
-                const contentAnswer = ContentState.createFromText(answer);
-
-                answers.push(EditorState.createWithContent(contentAnswer));
-            }
-
-            editors.push({
-                title: EditorState.createWithContent(content),
-                answers,
-            });
+            editors.push(this.createQuestion(question));
         }
 
         this.state = {
@@ -110,7 +95,7 @@ class EditGame extends React.Component {
             editors,
         };
 
-        this.createQuestion = this.createQuestion.bind(this);
+        this.renderQuestion = this.renderQuestion.bind(this);
         this.onChangeQuestion = this.onChangeQuestion.bind(this);
         this.onChangeAnswer = this.onChangeAnswer.bind(this);
     }
@@ -131,7 +116,26 @@ class EditGame extends React.Component {
         this.setState({editors})
     }
 
-    createAnswers(questionIndex, answers, correct) {
+    createQuestion(question) {
+        const content = ContentState.createFromText(question.title);
+
+        const answers = [];
+
+        for (let i = 0; i < 4; i++) {
+            const answer = question.answers[i] || '';
+
+            const contentAnswer = ContentState.createFromText(answer);
+
+            answers.push(EditorState.createWithContent(contentAnswer));
+        }
+
+        return {
+            title: EditorState.createWithContent(content),
+            answers,
+        };
+    }
+
+    renderAnswers(questionIndex, answers, correct) {
         return answers.map((answer, index) => {
             const style = classNames('answer', {
                 correct: correct === index,
@@ -147,7 +151,7 @@ class EditGame extends React.Component {
         });
     }
 
-    createQuestion(question, index) {
+    renderQuestion(question, index) {
         return <li key={index} styleName='question'>
             <div styleName='question-title'>
                 <Editor
@@ -156,7 +160,7 @@ class EditGame extends React.Component {
             </div>
 
             <ul styleName='answers'>
-                { this.createAnswers(index, question.answers, question.correct) }
+                { this.renderAnswers(index, question.answers, question.correct) }
             </ul>
         </li>;
     }
@@ -170,7 +174,7 @@ class EditGame extends React.Component {
             </div>
 
             <ul>
-                { questions.map(this.createQuestion) }
+                { questions.map(this.renderQuestion) }
             </ul>
         </div>;
     }

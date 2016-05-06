@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from 'react-router'
 import CSSModules from 'react-css-modules';
 
+import { Editor, EditorState, ContentState } from 'draft-js';
+
 import PlayIcon from '../../components/play-icon';
 import classNames from 'classnames';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
@@ -82,11 +84,29 @@ class EditGame extends React.Component {
     constructor() {
         super();
 
+        const editors = [];
+
+        for (let i = 0; i < questions.length; i++) {
+            const content = ContentState.createFromText(questions[i].title);
+
+            editors.push(EditorState.createWithContent(content));
+        }
+
         this.state = {
             code: '',
+            editors,
         };
 
         this.createQuestion = this.createQuestion.bind(this);
+        this.onChange = this.onChange.bind(this);
+    }
+
+    onChange(index, editorState) {
+        const editors = [...this.state.editors];
+
+        editors[index] = editorState;
+
+        this.setState({editors})
     }
 
     createAnswers(answers, correct) {
@@ -101,7 +121,11 @@ class EditGame extends React.Component {
 
     createQuestion(question, index) {
         return <li key={index} styleName='question'>
-            <div styleName='question-title'>{question.title}</div>
+            <div styleName='question-title'>
+                <Editor
+                    onChange={(editorState) => this.onChange(index, editorState)}
+                    editorState={this.state.editors[index]}>{question.title}</Editor>
+            </div>
 
             <ul styleName='answers'>
                 { this.createAnswers(question.answers, question.correct) }

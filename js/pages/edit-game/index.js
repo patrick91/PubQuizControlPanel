@@ -91,7 +91,7 @@ class EditGame extends React.Component {
 
     createAnswers(answers, correct) {
         return answers.map((answer, index) => {
-            const style = classNames({
+            const style = classNames('answer', {
                 correct: correct === index,
             })
 
@@ -100,11 +100,11 @@ class EditGame extends React.Component {
     }
 
     createQuestion(question, index) {
-        return <li key={index}>
-            {question.title}
+        return <li key={index} styleName='question'>
+            <div styleName='question-title'>{question.title}</div>
 
-            <ul>
-                {this.createAnswers(question.answers, question.correct)}
+            <ul styleName='answers'>
+                { this.createAnswers(question.answers, question.correct) }
             </ul>
         </li>;
     }
@@ -124,4 +124,6 @@ class EditGame extends React.Component {
     }
 }
 
-export default CSSModules(styles)(EditGame);
+export default CSSModules(styles, {
+    allowMultiple: true,
+})(EditGame);

@@ -3,16 +3,16 @@
     min-height: 100vh;
     background-color: #9013FE;
     color: white;
-    padding: 2rem;
+    font-family: Roboto;
 }
 
 .header {
-    font-family: Roboto;
+    padding: 2rem;
     font-size: 2rem;
     font-weight: 200;
 
     width: 100%;
-    height: 5rem;
+    height: 9rem;
 
     display: flex;
     justify-content: space-between;
@@ -24,4 +24,31 @@
 
 .correct {
     font-weight: bold;
+}
+
+.question {
+    background: #BA68C8;
+    padding: 2rem;
+}
+
+.question:nth-child(odd) {
+    background: #8E24AA;
+}
+
+.question-title {
+    font-size: 2rem;
+}
+
+.answers {
+    display: flex;
+    flex-direction: row;
+
+    list-style: none;
+
+    margin-top: 2rem;
+    font-size: 1.5rem;
+}
+
+.answer {
+    margin-right: 2rem;
 }

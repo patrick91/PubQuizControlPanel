@@ -86,10 +86,23 @@ class EditGame extends React.Component {
 
         const editors = [];
 
-        for (let i = 0; i < questions.length; i++) {
-            const content = ContentState.createFromText(questions[i].title);
+        for (const question of questions) {
+            const content = ContentState.createFromText(question.title);
 
-            editors.push(EditorState.createWithContent(content));
+            const answers = [];
+
+            for (let i = 0; i < 4; i++) {
+                const answer = question.answers[i] || '';
+
+                const contentAnswer = ContentState.createFromText(answer);
+
+                answers.push(EditorState.createWithContent(contentAnswer));
+            }
+
+            editors.push({
+                title: EditorState.createWithContent(content),
+                answers,
+            });
         }
 
         this.state = {
@@ -98,24 +111,39 @@ class EditGame extends React.Component {
         };
 
         this.createQuestion = this.createQuestion.bind(this);
-        this.onChange = this.onChange.bind(this);
+        this.onChangeQuestion = this.onChangeQuestion.bind(this);
+        this.onChangeAnswer = this.onChangeAnswer.bind(this);
     }
 
-    onChange(index, editorState) {
+    onChangeQuestion(index, editorState) {
         const editors = [...this.state.editors];
 
-        editors[index] = editorState;
+        editors[index].title = editorState;
 
         this.setState({editors})
     }
 
-    createAnswers(answers, correct) {
+    onChangeAnswer(question, index, editorState) {
+        const editors = [...this.state.editors];
+
+        editors[question].answers[index] = editorState;
+
+        this.setState({editors})
+    }
+
+    createAnswers(questionIndex, answers, correct) {
         return answers.map((answer, index) => {
             const style = classNames('answer', {
                 correct: correct === index,
             })
 
-            return <li styleName={style} key={index}>{answer}</li>
+            return <li styleName={style} key={index}>
+                <Editor
+                    onChange={(editorState) => this.onChangeAnswer(
+                        questionIndex, index, editorState
+                    )}
+                    editorState={this.state.editors[questionIndex].answers[index]} />
+            </li>
         });
     }
 
@@ -123,12 +151,12 @@ class EditGame extends React.Component {
         return <li key={index} styleName='question'>
             <div styleName='question-title'>
                 <Editor
-                    onChange={(editorState) => this.onChange(index, editorState)}
-                    editorState={this.state.editors[index]}>{question.title}</Editor>
+                    onChange={(editorState) => this.onChangeQuestion(index, editorState)}
+                    editorState={this.state.editors[index].title} />
             </div>
 
             <ul styleName='answers'>
-                { this.createAnswers(question.answers, question.correct) }
+                { this.createAnswers(index, question.answers, question.correct) }
             </ul>
         </li>;
     }

@@ -175,6 +175,8 @@ class EditGame extends React.Component {
 
             <ul>
                 { questions.map(this.renderQuestion) }
+
+                <li styleName='add-new-question'>Add new question</li>
             </ul>
         </div>;
     }

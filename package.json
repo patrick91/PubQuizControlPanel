@@ -7,7 +7,7 @@
     "dev": "NODE_ENV=development webpack-dev-server --history-api-fallback --config webpack.dev.config.babel.js --hot --host 0.0.0.0 --port 5000",
     "build": "NODE_ENV=production webpack --config webpack.prod.config.babel.js -p --progress"
   },
-  "devDependencies": {
+  "dependencies": {
     "babel-core": "6.8.0",
     "babel-eslint": "^6.0.4",
     "babel-loader": "6.2.4",
@@ -40,9 +40,7 @@
     "redbox-react": "1.2.4",
     "style-loader": "^0.13.1",
     "webpack": "1.13.0",
-    "webpack-dev-server": "1.14.1"
-  },
-  "dependencies": {
+    "webpack-dev-server": "1.14.1",
     "draft-js": "^0.7.0"
   }
 }

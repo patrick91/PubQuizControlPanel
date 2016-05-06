@@ -1,5 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router'
+import { Link, withRouter } from 'react-router'
+
 import CSSModules from 'react-css-modules';
 import MaskedInput from 'react-maskedinput';
 
@@ -10,12 +11,19 @@ import styles from './styles.css';
 
 
 class Home extends React.Component {
+    static propTypes = {
+        router: React.PropTypes.object.isRequired,
+    }
+
     constructor() {
         super();
 
         this.state = {
             code: '',
         };
+
+        this.handleCodeChange = this.handleCodeChange.bind(this);
+        this.handleEditGame = this.handleEditGame.bind(this);
     }
 
     handleCodeChange(e) {
@@ -26,10 +34,14 @@ class Home extends React.Component {
         });
     }
 
-    render() {
+    handleEditGame() {
         const { code } = this.state;
 
-        console.log(code);
+        this.props.router.push(`/edit/${code}`);
+    }
+
+    render() {
+        const { code } = this.state;
 
         return <div styleName='wrapper'>
             <Link styleName='box' style={{
@@ -42,10 +54,11 @@ class Home extends React.Component {
                 Edit game
 
                 <MaskedInput
-                    onChange={ e => this.handleCodeChange(e) }
+                    onChange={this.handleCodeChange}
                     styleName='code-input' mask='1 1 1 1' maxLength='4' />
 
                 { code.length >= 4 && <FloatingActionButton
+                    onClick={this.handleEditGame}
                     styleName='button' backgroundColor='#9013FE'>
                     <Done />
                 </FloatingActionButton> }
@@ -54,4 +67,4 @@ class Home extends React.Component {
     }
 }
 
-export default CSSModules(styles)(Home);
+export default withRouter(CSSModules(styles)(Home));

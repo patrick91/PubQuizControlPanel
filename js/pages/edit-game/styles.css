@@ -1,0 +1,27 @@
+.wrapper {
+    width: 100%;
+    min-height: 100vh;
+    background-color: #9013FE;
+    color: white;
+    padding: 2rem;
+}
+
+.header {
+    font-family: Roboto;
+    font-size: 2rem;
+    font-weight: 200;
+
+    width: 100%;
+    height: 5rem;
+
+    display: flex;
+    justify-content: space-between;
+}
+
+.header h1 {
+    font-weight: inherit;
+}
+
+.correct {
+    font-weight: bold;
+}

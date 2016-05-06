@@ -6,6 +6,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 import Home from './pages/home';
+import EditGame from './pages/edit-game';
 
 // eslint-disable-next-line
 import styles from 'app.css';
@@ -13,6 +14,7 @@ import styles from 'app.css';
 
 const Application = () => <Router history={browserHistory}>
     <Route path="/" component={Home} />
+    <Route path="/edit/:code" component={EditGame} />
 </Router>;
 
 ReactDOM.render(<MuiThemeProvider muiTheme={getMuiTheme()}>

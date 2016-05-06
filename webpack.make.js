@@ -69,8 +69,9 @@ export default function makeConf(options) {
     return {
         entry,
         output: {
-            path: path.join(__dirname, '/dist'),
+            path: 'dist',
             filename: 'bundle.js',
+            publicPath: '/',
         },
         module: {
             loaders: [

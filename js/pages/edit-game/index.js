@@ -98,6 +98,7 @@ class EditGame extends React.Component {
         this.renderQuestion = this.renderQuestion.bind(this);
         this.onChangeQuestion = this.onChangeQuestion.bind(this);
         this.onChangeAnswer = this.onChangeAnswer.bind(this);
+        this.addNewQuestion = this.addNewQuestion.bind(this);
     }
 
     onChangeQuestion(index, editorState) {
@@ -105,7 +106,7 @@ class EditGame extends React.Component {
 
         editors[index].title = editorState;
 
-        this.setState({editors})
+        this.setState({editors});
     }
 
     onChangeAnswer(question, index, editorState) {
@@ -113,8 +114,25 @@ class EditGame extends React.Component {
 
         editors[question].answers[index] = editorState;
 
-        this.setState({editors})
+        this.setState({editors});
     }
+
+    addNewQuestion() {
+        const question = {
+            title: 'random question',
+            answers: [],
+            correct: 0,
+        };
+
+        questions.push(question);
+
+        const editors = [...this.state.editors];
+
+        editors.push(this.createQuestion(question));
+
+        this.setState({editors});
+    }
+
 
     createQuestion(question) {
         const content = ContentState.createFromText(question.title);
@@ -122,7 +140,7 @@ class EditGame extends React.Component {
         const answers = [];
 
         for (let i = 0; i < 4; i++) {
-            const answer = question.answers[i] || '';
+            const answer = question.answers[i] || `${i + 1}`;
 
             const contentAnswer = ContentState.createFromText(answer);
 
@@ -132,6 +150,7 @@ class EditGame extends React.Component {
         return {
             title: EditorState.createWithContent(content),
             answers,
+            correct: question.correct,
         };
     }
 
@@ -146,21 +165,21 @@ class EditGame extends React.Component {
                     onChange={(editorState) => this.onChangeAnswer(
                         questionIndex, index, editorState
                     )}
-                    editorState={this.state.editors[questionIndex].answers[index]} />
+                    editorState={answer} />
             </li>
         });
     }
 
-    renderQuestion(question, index) {
+    renderQuestion(editor, index) {
         return <li key={index} styleName='question'>
             <div styleName='question-title'>
                 <Editor
                     onChange={(editorState) => this.onChangeQuestion(index, editorState)}
-                    editorState={this.state.editors[index].title} />
+                    editorState={editor.title} />
             </div>
 
             <ul styleName='answers'>
-                { this.renderAnswers(index, question.answers, question.correct) }
+                { this.renderAnswers(index, editor.answers, editor.correct) }
             </ul>
         </li>;
     }
@@ -174,9 +193,9 @@ class EditGame extends React.Component {
             </div>
 
             <ul>
-                { questions.map(this.renderQuestion) }
+                { this.state.editors.map(this.renderQuestion) }
 
-                <li styleName='add-new-question'>Add new question</li>
+                <li styleName='add-new-question' onClick={this.addNewQuestion}>Add new question</li>
             </ul>
         </div>;
     }

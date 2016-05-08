@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, withRouter } from 'react-router'
+import { withRouter } from 'react-router'
 
 import CSSModules from 'react-css-modules';
 import MaskedInput from 'react-maskedinput';
@@ -57,13 +57,20 @@ class Home extends React.Component {
         const { code } = this.state;
 
         return <div styleName='wrapper'>
-            <div styleName='box' style={{
-                backgroundColor: '#9013FE',
-            }} onClick={this.handleNewGame}>Create new game</div>
+            <div
+                styleName='box'
+                style={{
+                    backgroundColor: '#9013FE',
+                }}
+                onClick={this.handleNewGame}
+            >Create new game</div>
 
-            <div styleName='box' style={{
-                backgroundColor: '#50E3C2',
-            }}>
+            <div
+                styleName='box'
+                style={{
+                    backgroundColor: '#50E3C2',
+                }}>
+
                 Edit game
 
                 <MaskedInput

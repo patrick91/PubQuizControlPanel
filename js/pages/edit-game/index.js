@@ -1,13 +1,10 @@
 import React from 'react';
-import { Link } from 'react-router'
 import CSSModules from 'react-css-modules';
 
 import { Editor, EditorState, ContentState } from 'draft-js';
 
 import PlayIcon from '../../components/play-icon';
 import classNames from 'classnames';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
-import Done from 'material-ui/svg-icons/action/done';
 
 import styles from './styles.css';
 

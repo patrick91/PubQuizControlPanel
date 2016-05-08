@@ -26,6 +26,7 @@
     "eslint-plugin-jsx-a11y": "^1.0.4",
     "eslint-plugin-react": "^5.0.1",
     "extract-text-webpack-plugin": "^1.0.1",
+    "firebase": "^2.4.2",
     "html-webpack-plugin": "2.16.1",
     "lodash": "^4.11.2",
     "material-ui": "^0.15.0-beta.2",

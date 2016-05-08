@@ -127,7 +127,9 @@ class EditGame extends React.Component {
 
         editors.push(this.createQuestion(question));
 
-        this.setState({editors});
+        this.setState({editors}, () => {
+            window.scrollTo(0, document.body.scrollHeight);
+        });
     }
 
 

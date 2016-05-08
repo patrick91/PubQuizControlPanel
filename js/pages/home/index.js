@@ -24,6 +24,13 @@ class Home extends React.Component {
 
         this.handleCodeChange = this.handleCodeChange.bind(this);
         this.handleEditGame = this.handleEditGame.bind(this);
+        this.handleNewGame = this.handleNewGame.bind(this);
+    }
+
+    generateNewGameCode() {
+        const color = Math.floor(Math.random() * 1000 + 1);
+
+        return (`0000${color}`).slice(-4);
     }
 
     handleCodeChange(e) {
@@ -40,13 +47,19 @@ class Home extends React.Component {
         this.props.router.push(`/edit/${code}`);
     }
 
+    handleNewGame() {
+        const code = this.generateNewGameCode();
+
+        this.props.router.push(`/edit/${code}`);
+    }
+
     render() {
         const { code } = this.state;
 
         return <div styleName='wrapper'>
-            <Link styleName='box' style={{
+            <div styleName='box' style={{
                 backgroundColor: '#9013FE',
-            }} to="new-game">Create new game</Link>
+            }} onClick={this.handleNewGame}>Create new game</div>
 
             <div styleName='box' style={{
                 backgroundColor: '#50E3C2',

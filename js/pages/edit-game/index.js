@@ -160,6 +160,8 @@ class EditGame extends React.Component {
 
             return <li styleName={style} key={index}>
                 <Editor
+                    stripPastedStyles
+                    readOnly={this.isGameStarted()}
                     onChange={(editorState) => this.onChangeAnswer(
                         questionIndex, index, editorState
                     )}
@@ -176,6 +178,8 @@ class EditGame extends React.Component {
         return <li key={index} styleName={questionStyle}>
             <div styleName='question-title'>
                 <Editor
+                    stripPastedStyles
+                    readOnly={this.isGameStarted()}
                     onChange={(editorState) => this.onChangeQuestion(index, editorState)}
                     editorState={editor.title} />
             </div>

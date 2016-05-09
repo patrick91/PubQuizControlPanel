@@ -29,6 +29,9 @@ class EditGame extends React.Component {
         this.onChangeAnswer = this.onChangeAnswer.bind(this);
         this.addNewQuestion = this.addNewQuestion.bind(this);
         this.onGameObjectUpdate = this.onGameObjectUpdate.bind(this);
+        this.startGame = this.startGame.bind(this);
+        this.finishGame = this.finishGame.bind(this);
+        this.nextQuestion = this.nextQuestion.bind(this);
     }
 
     componentWillMount() {
@@ -178,12 +181,59 @@ class EditGame extends React.Component {
         </li>;
     }
 
+    startGame() {
+        // TODO:
+        // Show modal that says 'Starting the game'
+
+        // reset the current question to the first one
+        this.backend.child('currentQuestion').set(0, () => {
+            this.backend.child('status').set('running', () => {
+                // TODO:
+                // Hide 'Starting the game' modal
+            });
+        });
+    }
+
+    finishGame() {
+        // TODO: Show modal 'Ending the game'
+        this.backend.child('status').set('finished', () => {
+            // TODO: Hide 'ending the game' modal
+        });
+    }
+
+    nextQuestion() {
+        // TODO: Show modal 'Changing question'
+        const nextQuestionIndex = this.state.game.currentQuestion + 1;
+
+        if (nextQuestionIndex >= this.state.game.questions.length) {
+            // TODO: Show modal 'no more questions'
+            console.log('no more questions');
+            return;
+        }
+
+        this.backend.child('currentQuestion')
+                    .set(this.state.game.currentQuestion + 1, () => {
+                        // TODO: Hide modal 'changing question'
+                    });
+    }
+
     render() {
+        if (!this.state.game) {
+            return <div>Waiting for the game to load...</div>;
+        }
+
         return <div styleName='wrapper'>
             <div styleName='header'>
                 <h1>Editing game: <strong>{this.props.params.code}</strong></h1>
 
-                <div><PlayIcon /></div>
+                {(this.isGameNotStartedYet() || this.isGameFinished()) && <div onClick={this.startGame}>
+                    <PlayIcon />
+                </div>}
+
+                {this.isGameStarted() && <div>
+                    <span onClick={this.nextQuestion}>Next question</span>{' '}
+                    <span onClick={this.finishGame}>Finish game</span>
+                </div>}
             </div>
 
             <ul>
@@ -208,6 +258,14 @@ class EditGame extends React.Component {
         }
 
         return this.state.game.status === 'running';
+    }
+
+    isGameNotStartedYet() {
+        if (!this.state.game) {
+            return false;
+        }
+
+        return this.state.game.status === 'not_started';
     }
 }
 

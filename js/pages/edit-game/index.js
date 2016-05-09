@@ -161,7 +161,11 @@ class EditGame extends React.Component {
     }
 
     renderQuestion(editor, index) {
-        return <li key={index} styleName='question'>
+        const questionStyle = classNames('question', {
+            'question-current': index === this.state.game.currentQuestion,
+        });
+
+        return <li key={index} styleName={questionStyle}>
             <div styleName='question-title'>
                 <Editor
                     onChange={(editorState) => this.onChangeQuestion(index, editorState)}

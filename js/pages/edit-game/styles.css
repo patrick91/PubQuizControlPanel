@@ -40,6 +40,10 @@
     font-size: 2rem;
 }
 
+.question-current {
+    background: green !important;
+}
+
 .answers {
     display: flex;
     flex-direction: row;

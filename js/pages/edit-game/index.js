@@ -191,10 +191,18 @@ class EditGame extends React.Component {
     }
 
     isGameFinished() {
+        if (!this.state.game) {
+            return false;
+        }
+
         return this.state.game.status === 'finished';
     }
 
     isGameStarted() {
+        if (!this.state.game) {
+            return false;
+        }
+
         return this.state.game.status === 'running';
     }
 }

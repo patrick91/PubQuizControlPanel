@@ -83,7 +83,7 @@ class EditGame extends React.Component {
         const textBlocks = convertToRaw(editorState.getCurrentContent()).blocks;
         const text = textBlocks.reduce((previousValue, block, _) => {
             return `${previousValue} ${block.text}`;
-        }, '');
+        }, '').trim();
 
         this.backend.child(`questions/${index}/title`).set(text);
         this.setState({ editors });
@@ -95,7 +95,7 @@ class EditGame extends React.Component {
         const textBlocks = convertToRaw(editorState.getCurrentContent()).blocks;
         const text = textBlocks.reduce((previousValue, block, _) => {
             return `${previousValue} ${block.text}`;
-        }, '');
+        }, '').trim();
 
         this.backend.child(`questions/${question}/answers/${index}`).set(text);
         editors[question].answers[index] = editorState;

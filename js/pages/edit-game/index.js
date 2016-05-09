@@ -9,6 +9,7 @@ import classNames from 'classnames';
 import Firebase from 'firebase';
 
 import styles from './styles.css';
+import Modal from '../../components/modal';
 
 
 class EditGame extends React.Component {
@@ -22,6 +23,9 @@ class EditGame extends React.Component {
         this.state = {
             code: '',
             editors: [],
+            modalTitle: '',
+            modalMessage: '',
+            modalOpen: false,
         };
 
         this.renderQuestion = this.renderQuestion.bind(this);
@@ -32,6 +36,7 @@ class EditGame extends React.Component {
         this.startGame = this.startGame.bind(this);
         this.finishGame = this.finishGame.bind(this);
         this.nextQuestion = this.nextQuestion.bind(this);
+        this.hideModal = this.hideModal.bind(this);
     }
 
     componentWillMount() {
@@ -182,39 +187,50 @@ class EditGame extends React.Component {
     }
 
     startGame() {
-        // TODO:
-        // Show modal that says 'Starting the game'
+        this.showModal('Starting the game', 'Starting the game...');
 
         // reset the current question to the first one
         this.backend.child('currentQuestion').set(0, () => {
-            this.backend.child('status').set('running', () => {
-                // TODO:
-                // Hide 'Starting the game' modal
-            });
+            this.backend.child('status').set('running', this.hideModal);
         });
     }
 
     finishGame() {
         // TODO: Show modal 'Ending the game'
-        this.backend.child('status').set('finished', () => {
-            // TODO: Hide 'ending the game' modal
-        });
+        this.showModal('Ending the game', 'Ending the game...');
+
+        this.backend.child('status').set('finished', this.hideModal);
     }
 
     nextQuestion() {
+        this.showModal('Changing question', 'Changing question...');
+
         // TODO: Show modal 'Changing question'
         const nextQuestionIndex = this.state.game.currentQuestion + 1;
 
         if (nextQuestionIndex >= this.state.game.questions.length) {
             // TODO: Show modal 'no more questions'
             console.log('no more questions');
+            this.showModal('Error', 'No more questions');
             return;
         }
 
         this.backend.child('currentQuestion')
-                    .set(this.state.game.currentQuestion + 1, () => {
-                        // TODO: Hide modal 'changing question'
-                    });
+                    .set(this.state.game.currentQuestion + 1, this.hideModal);
+    }
+
+    showModal(title, message) {
+        this.setState({
+            modalTitle: title,
+            modalMessage: message,
+            modalOpen: true,
+        });
+    }
+
+    hideModal() {
+        this.setState({
+            modalOpen: false,
+        });
     }
 
     render() {
@@ -241,6 +257,11 @@ class EditGame extends React.Component {
 
                 {!this.isGameStarted() && <li styleName='add-new-question' onClick={this.addNewQuestion}>Add new question</li>}
             </ul>
+
+            <Modal
+                title={this.state.modalTitle}
+                message={this.state.modalMessage}
+                open={this.state.modalOpen} />
         </div>;
     }
 

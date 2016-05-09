@@ -110,12 +110,10 @@ class EditGame extends React.Component {
             correct: 0,
         };
 
-        this.backend.child('questions').transaction(currentQuestions => {
-            return [
-                ...currentQuestions,
-                question,
-            ];
-        });
+        this.backend.child('questions').transaction(currentQuestions => [
+            ...currentQuestions,
+            question,
+        ]);
 
         const editors = [...this.state.editors];
 

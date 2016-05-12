@@ -165,13 +165,20 @@ class EditGame extends React.Component {
             })
 
             return <li styleName={style} key={index}>
-                <Editor
-                    stripPastedStyles
-                    readOnly={this.isGameStarted()}
-                    onChange={(editorState) => this.onChangeAnswer(
-                        questionIndex, index, editorState
-                    )}
-                    editorState={answer} />
+                <input
+                    type="radio"
+                    name={`question[${questionIndex}]`}
+                    checked={correct === index} />
+
+                <div styleName='answer-editor'>
+                    <Editor
+                        stripPastedStyles
+                        readOnly={this.isGameStarted()}
+                        onChange={(editorState) => this.onChangeAnswer(
+                            questionIndex, index, editorState
+                        )}
+                        editorState={answer} />
+                </div>
             </li>
         });
     }

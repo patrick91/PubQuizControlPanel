@@ -13,6 +13,8 @@ import Modal from '../../components/modal';
 
 import config from '../../../config.js';
 
+import _ from 'lodash';
+
 
 class EditGame extends React.Component {
     static propTypes = {
@@ -31,8 +33,8 @@ class EditGame extends React.Component {
         };
 
         this.renderQuestion = this.renderQuestion.bind(this);
-        this.onChangeQuestion = this.debounce(this.onChangeQuestion.bind(this), 250);
-        this.onChangeAnswer = this.debounce(this.onChangeAnswer.bind(this), 250);
+        this.onChangeQuestion = _.debounce(this.onChangeQuestion.bind(this), 250);
+        this.onChangeAnswer = _.debounce(this.onChangeAnswer.bind(this), 250);
         this.addNewQuestion = this.addNewQuestion.bind(this);
         this.onGameObjectUpdate = this.onGameObjectUpdate.bind(this);
         this.startGame = this.startGame.bind(this);
@@ -193,31 +195,6 @@ class EditGame extends React.Component {
             </ul>
         </li>;
     }
-
-    debounce(func, wait, immediate) {
-        let timeout;
-
-        return () => {
-            const context = this;
-            const args = arguments;
-
-            const later = () => {
-                timeout = null;
-                if (!immediate) {
-                    func.apply(context, args);
-                }
-            };
-
-            const callNow = immediate && !timeout;
-
-            clearTimeout(timeout);
-            timeout = setTimeout(later, wait);
-
-            if (callNow) {
-                func.apply(context, args);
-            }
-        };
-    };
 
     startGame() {
         this.showModal('Starting the game', 'Starting the game...');

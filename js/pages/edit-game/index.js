@@ -13,8 +13,6 @@ import Modal from '../../components/modal';
 
 import config from '../../../config.js';
 
-import _ from 'lodash';
-
 
 class EditGame extends React.Component {
     static propTypes = {
@@ -33,14 +31,16 @@ class EditGame extends React.Component {
         };
 
         this.renderQuestion = this.renderQuestion.bind(this);
-        this.onChangeQuestion = _.debounce(this.onChangeQuestion.bind(this), 250);
-        this.onChangeAnswer = _.debounce(this.onChangeAnswer.bind(this), 250);
+        this.onChangeQuestion = this.onChangeQuestion.bind(this);
+        this.onChangeAnswer = this.onChangeAnswer.bind(this);
         this.addNewQuestion = this.addNewQuestion.bind(this);
         this.onGameObjectUpdate = this.onGameObjectUpdate.bind(this);
         this.startGame = this.startGame.bind(this);
         this.finishGame = this.finishGame.bind(this);
         this.nextQuestion = this.nextQuestion.bind(this);
         this.hideModal = this.hideModal.bind(this);
+
+        this.updateTimeouts = {};
     }
 
     componentWillMount() {
@@ -87,8 +87,19 @@ class EditGame extends React.Component {
         });
     }
 
+    updateBackendChild(key, value) {
+        const timeout = this.updateTimeouts[key];
+
+        if (timeout) {
+            window.clearTimeout(timeout)
+        }
+
+        this.updateTimeouts[key] = window.setTimeout(() =>
+            this.backend.child(key).set(value)
+        , 250);
+    }
+
     onChangeQuestion(index, editorState) {
-        console.log('index', index, editorState)
         const editors = [...this.state.editors];
 
         editors[index].title = editorState;
@@ -98,7 +109,9 @@ class EditGame extends React.Component {
                                        '')
                                .trim();
 
-        this.backend.child(`questions/${index}/title`).set(text);
+        const key = `questions/${index}/title`;
+
+        this.updateBackendChild(key, text);
 
         this.setState({ editors });
     }
@@ -110,7 +123,9 @@ class EditGame extends React.Component {
         const text = textBlocks.reduce((previousValue, block, _) => `${previousValue} ${block.text}`,
                                        '').trim();
 
-        this.backend.child(`questions/${question}/answers/${index}`).set(text);
+        const key = `questions/${question}/answers/${index}`;
+
+        this.updateBackendChild(key, text);
 
         editors[question].answers[index] = editorState;
 

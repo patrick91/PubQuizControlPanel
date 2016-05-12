@@ -189,6 +189,7 @@ class EditGame extends React.Component {
                 <input
                     type="radio"
                     name={`question[${questionIndex}]`}
+                    disabled={this.isGameStarted()}
                     onChange={e => this.onChangeCorrectAnswer(questionIndex, index)}
                     checked={correct === index} />
 

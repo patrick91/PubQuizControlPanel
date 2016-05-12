@@ -27,6 +27,7 @@ class EditGame extends React.Component {
             editors: [],
             modalTitle: '',
             modalMessage: '',
+            modalShowCloseButton: false,
             modalOpen: false,
         };
 
@@ -249,7 +250,7 @@ class EditGame extends React.Component {
         if (nextQuestionIndex >= this.state.game.questions.length) {
             // TODO: Show modal 'no more questions'
             console.log('no more questions');
-            this.showModal('Error', 'No more questions');
+            this.showModal('Error', 'No more questions', true);
             return;
         }
 
@@ -257,11 +258,12 @@ class EditGame extends React.Component {
                     .set(this.state.game.currentQuestion + 1, this.hideModal);
     }
 
-    showModal(title, message) {
+    showModal(title, message, showCloseButton=false) {
         this.setState({
             modalTitle: title,
             modalMessage: message,
             modalOpen: true,
+            modalShowCloseButton: showCloseButton,
         });
     }
 
@@ -299,6 +301,8 @@ class EditGame extends React.Component {
             <Modal
                 title={this.state.modalTitle}
                 message={this.state.modalMessage}
+                showCloseButton={this.state.modalShowCloseButton}
+                onClose={this.hideModal}
                 open={this.state.modalOpen} />
         </div>;
     }

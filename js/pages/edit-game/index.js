@@ -39,6 +39,7 @@ class EditGame extends React.Component {
         this.finishGame = this.finishGame.bind(this);
         this.nextQuestion = this.nextQuestion.bind(this);
         this.hideModal = this.hideModal.bind(this);
+        this.onChangeCorrectAnswer = this.onChangeCorrectAnswer.bind(this);
 
         this.updateTimeouts = {};
     }
@@ -173,6 +174,10 @@ class EditGame extends React.Component {
         };
     }
 
+    onChangeCorrectAnswer(questionIndex, answerIndex) {
+        this.backend.child(`questions/${questionIndex}/correct`).set(answerIndex);
+    }
+
     renderAnswers(questionIndex, answers, correct) {
         return answers.map((answer, index) => {
             const style = classNames('answer', {
@@ -183,6 +188,7 @@ class EditGame extends React.Component {
                 <input
                     type="radio"
                     name={`question[${questionIndex}]`}
+                    onChange={e => this.onChangeCorrectAnswer(questionIndex, index)}
                     checked={correct === index} />
 
                 <div styleName='answer-editor'>

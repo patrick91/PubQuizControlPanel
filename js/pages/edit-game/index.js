@@ -11,6 +11,8 @@ import Firebase from 'firebase';
 import styles from './styles.css';
 import Modal from '../../components/modal';
 
+import config from '../../../config.js';
+
 
 class EditGame extends React.Component {
     static propTypes = {
@@ -29,8 +31,8 @@ class EditGame extends React.Component {
         };
 
         this.renderQuestion = this.renderQuestion.bind(this);
-        this.onChangeQuestion = this.onChangeQuestion.bind(this);
-        this.onChangeAnswer = this.onChangeAnswer.bind(this);
+        this.onChangeQuestion = this.debounce(this.onChangeQuestion.bind(this), 250);
+        this.onChangeAnswer = this.debounce(this.onChangeAnswer.bind(this), 250);
         this.addNewQuestion = this.addNewQuestion.bind(this);
         this.onGameObjectUpdate = this.onGameObjectUpdate.bind(this);
         this.startGame = this.startGame.bind(this);
@@ -46,7 +48,7 @@ class EditGame extends React.Component {
         // etc.
         const gameCode = this.props.params.code;
 
-        this.backend = new Firebase(`https://testquizapp123456.firebaseio.com/games/${gameCode}`);
+        this.backend = new Firebase(`${config.FIREBASE_URL}/games/${gameCode}`);
         this.backend.on('value', this.onGameObjectUpdate);
     }
 
@@ -84,16 +86,18 @@ class EditGame extends React.Component {
     }
 
     onChangeQuestion(index, editorState) {
+        console.log('index', index, editorState)
         const editors = [...this.state.editors];
 
         editors[index].title = editorState;
 
         const textBlocks = convertToRaw(editorState.getCurrentContent()).blocks;
-        const text = textBlocks.reduce((previousValue, block, _) => {
-            return `${previousValue} ${block.text}`;
-        }, '').trim();
+        const text = textBlocks.reduce((previousValue, block, _) => `${previousValue} ${block.text}`,
+                                       '')
+                               .trim();
 
         this.backend.child(`questions/${index}/title`).set(text);
+
         this.setState({ editors });
     }
 
@@ -101,11 +105,11 @@ class EditGame extends React.Component {
         const editors = [...this.state.editors];
 
         const textBlocks = convertToRaw(editorState.getCurrentContent()).blocks;
-        const text = textBlocks.reduce((previousValue, block, _) => {
-            return `${previousValue} ${block.text}`;
-        }, '').trim();
+        const text = textBlocks.reduce((previousValue, block, _) => `${previousValue} ${block.text}`,
+                                       '').trim();
 
         this.backend.child(`questions/${question}/answers/${index}`).set(text);
+
         editors[question].answers[index] = editorState;
 
         this.setState({ editors });
@@ -189,6 +193,31 @@ class EditGame extends React.Component {
             </ul>
         </li>;
     }
+
+    debounce(func, wait, immediate) {
+        let timeout;
+
+        return () => {
+            const context = this;
+            const args = arguments;
+
+            const later = () => {
+                timeout = null;
+                if (!immediate) {
+                    func.apply(context, args);
+                }
+            };
+
+            const callNow = immediate && !timeout;
+
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+
+            if (callNow) {
+                func.apply(context, args);
+            }
+        };
+    };
 
     startGame() {
         this.showModal('Starting the game', 'Starting the game...');

@@ -1,0 +1,23 @@
+.wrapper {
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+    background: #9013FE;
+    color: white;
+
+    padding: 3vw 5vw;
+}
+
+.big-text {
+    font-size: 8vw;
+    font-weight: 100;
+    font-family: Roboto;
+}
+
+
+.answer {
+    font-weight: bold;
+    font-size: 2vw;
+    font-family: Roboto;
+    margin-top: 2rem;
+}

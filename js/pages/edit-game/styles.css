@@ -37,7 +37,10 @@
 }
 
 .question-title {
-    font-size: 2rem;
+    font-size: 2rem;    
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 .question-current {
@@ -84,4 +87,8 @@
 .add-new-question:hover {
     color: #9013FE;
     background-color: white;
+}
+
+.cancel {
+    align-self: flex-end;
 }

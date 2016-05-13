@@ -41,6 +41,7 @@ class EditGame extends React.Component {
         this.nextQuestion = this.nextQuestion.bind(this);
         this.hideModal = this.hideModal.bind(this);
         this.onChangeCorrectAnswer = this.onChangeCorrectAnswer.bind(this);
+        this.deleteQuestion = this.deleteQuestion.bind(this);
 
         this.updateTimeouts = {};
     }
@@ -80,9 +81,11 @@ class EditGame extends React.Component {
         console.log('game', game);
         const editors = [];
 
-        game.questions.forEach(question => {
-            editors.push(this.createQuestion(question));
-        });
+        if (game.questions) {
+            game.questions.forEach(question => {
+                editors.push(this.createQuestion(question));
+            });
+        }
 
         this.setState({
             editors,
@@ -99,6 +102,15 @@ class EditGame extends React.Component {
         this.updateTimeouts[key] = window.setTimeout(() =>
             this.backend.child(key).set(value)
         , 250);
+    }
+
+    deleteQuestion(questionIndex) {
+        this.backend.child('questions/').once('value', snap => {
+            const questions = snap.val();
+            questions.splice(questionIndex, 1);
+
+            this.backend.child('questions').set(questions);
+        });
     }
 
     onChangeQuestion(index, editorState) {
@@ -141,10 +153,16 @@ class EditGame extends React.Component {
             correct: 0,
         };
 
-        this.backend.child('questions').transaction(currentQuestions => [
-            ...currentQuestions,
-            question,
-        ]);
+        this.backend.child('questions').transaction(currentQuestions => {
+            if (currentQuestions === null) {
+                return [question];
+            } else {
+                return [
+                    ...currentQuestions,
+                    question,
+                ];
+            }
+        });
 
         const editors = [...this.state.editors];
 
@@ -218,6 +236,10 @@ class EditGame extends React.Component {
                     readOnly={this.isGameStarted()}
                     onChange={(editorState) => this.onChangeQuestion(index, editorState)}
                     editorState={editor.title} />
+
+                { !this.isGameStarted() && <div styleName='cancel' onClick={_ => this.deleteQuestion(index)}>
+                    X
+                </div> }
             </div>
 
             <ul styleName='answers'>

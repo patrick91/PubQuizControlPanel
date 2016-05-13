@@ -38,7 +38,7 @@ class Game extends React.Component {
     }
 
     componentWillUnmount() {
-        this.backend.off('child_changed');
+        this.backend.off('child_changed', this.onGameObjectUpate);
     }
 
     onGameObjectUpate(snapshot) {
